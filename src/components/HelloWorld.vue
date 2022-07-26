@@ -1,9 +1,47 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive } from 'vue'
+import { User } from '@prisma/client';
 
 defineProps<{ msg: string }>()
 
-const count = ref(0)
+const rand = (length: number) => {
+    let result = ''
+    const characters = '0123456789ABCDEF'
+    while (length > 0) {
+      result += characters.charAt(Math.floor(Math.random() * 16))
+      length -= 1
+    }
+    return result
+}
+
+
+const db = window.database
+const users = reactive<User[]>([])
+const loadUsers = async () => {
+  const data = await db.users.findAll()
+  users.splice(0)
+  users.push(...data)
+}
+const addUser = async() => {
+  await db.users.add({
+    name: rand(8),
+    email: rand(12),
+    posts: {
+      create: [
+        { title: `title ${rand(10)}` }
+      ],
+    },
+    profile: {
+      create: { bio: `bio ${rand(4)}` }
+    }
+  })
+  await loadUsers()
+}
+const deleteUsers = async() => {
+  await db.users.deleteAll()
+  await loadUsers()
+}
+loadUsers()
 </script>
 
 <template>
@@ -24,13 +62,15 @@ const count = ref(0)
     </a>
     |
     <a href="https://v3.vuejs.org/" target="_blank">Vue 3 Docs</a>
+    |
+    <a href="https://www.prisma.io/docs/" target="_blank">Prisma Docs</a>
   </p>
 
-  <button type="button" @click="count++">count is: {{ count }}</button>
-  <p>
-    Edit
-    <code>components/HelloWorld.vue</code> to test hot module replacement.
-  </p>
+  <button type="button" @click="addUser">Add User</button>
+  <div v-for="user of users">
+    {{ user }}
+  </div>
+  <button v-if="users.length > 0" type="button" @click="deleteUsers">Delete All Users</button>
 </template>
 
 <style scoped>

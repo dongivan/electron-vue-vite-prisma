@@ -8,7 +8,30 @@
     "output": "release/${version}"
   },
   "files": [
-    "dist"
+    "dist",
+    /* package generated prisma code */
+    "node_modules/.prisma/**/*",
+    /* package prisma cli */
+    "node_modules/prisma/**/*",
+    /* package prisma client */
+    "node_modules/@prisma/**/*",
+    /* package migration files */
+    "prisma",
+    /* package production .env file */
+    {
+      "from": ".production",
+      "to": ".",
+      "filter": ["**/*"]
+    },
+  ],
+  /*
+  IMPORTANT: setting `includeSubNodeModules` to `true` so that `node_modules/.prisma`
+  could be packaged.
+   */
+  "includeSubNodeModules": true,
+  "asarUnpack": [
+    "**\\*.{node,dll,exe}",
+    "prisma",
   ],
   "mac": {
     "artifactName": "${productName}_${version}.${ext}",

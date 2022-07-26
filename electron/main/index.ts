@@ -36,7 +36,7 @@ async function createWindow() {
     webPreferences: {
       preload,
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: true,
     },
   })
 
@@ -98,3 +98,6 @@ ipcMain.handle('open-win', (event, arg) => {
     // childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
   }
 })
+
+ipcMain.on('app:getAppPath', (evt) => evt.returnValue = app.getAppPath())
+ipcMain.on('app:getPath', (evt, ...args) => evt.returnValue = app.getPath(args[0]))
