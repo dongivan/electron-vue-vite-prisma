@@ -2,6 +2,8 @@
 
 This boilerplate based on [`electron-vite-vue@2.0`](https://github.com/electron-vite/electron-vite-vue) and integrates [`prisma@4.0`](https://github.com/prisma/prisma).
 
+[[中文](README_cn.md)]
+
 ## Get `prisma` work in renderer process
 `prisma` **cannot** work in a **browser**, so we cannot use it directly in the renderer process. There are two ways to use it with `electron`:
 
